@@ -2150,7 +2150,7 @@ async function loadSheet() {
     if (items.length === 0) {
       const proceed = confirm(
         "⚠ This sheet has no items in Column 1 (and Column 4 if present).\n\n" +
-        "The app expects item names like ACS-04F-01 (doors) or CA-09F-01 (cameras) in those columns.\n\n" +
+        "The app expects item names like AC-9F-01 (doors) or CA-09F-01 (cameras) in those columns.\n\n" +
         "Load anyway? You won't be able to capture photos for any items."
       );
       if (!proceed) {
@@ -2161,7 +2161,7 @@ async function loadSheet() {
       }
     } else {
       // Classify items by naming pattern
-      const ACS_RX  = /^ACS-/i;
+      const ACS_RX  = /^ACS?-/i;   // matches AC- or ACS-
       const CCTV_RX = /^CA-/i;
       let acsCount = 0, cctvCount = 0, otherCount = 0;
       for (const name of items) {
@@ -2182,8 +2182,8 @@ async function loadSheet() {
         const switchTo = cm === "acs" ? "cctv" : "acs";
         const msg = `⚠ This sheet looks like a ${otherModeLabel} sheet, but you're in ${currentLabel} mode.\n\n` +
                     `Found:\n` +
-                    `  • ${acsCount} items matching ACS-XXF-XX (doors)\n` +
-                    `  • ${cctvCount} items matching CA-XXF-XX (cameras)\n` +
+                    `  • ${acsCount} items matching AC-/ACS- (doors)\n` +
+                    `  • ${cctvCount} items matching CA- (cameras)\n` +
                     `  • ${otherCount} other items\n\n` +
                     `Switch to ${otherModeLabel} mode for correct filenames?\n` +
                     `(OK = switch · Cancel = stay in ${currentLabel} mode)`;
@@ -2197,8 +2197,8 @@ async function loadSheet() {
         const proceed = confirm(
           `⚠ Items in this sheet don't look like doors or cameras.\n\n` +
           `Found:\n` +
-          `  • ${acsCount} items matching ACS-XXF-XX (doors)\n` +
-          `  • ${cctvCount} items matching CA-XXF-XX (cameras)\n` +
+          `  • ${acsCount} items matching AC-/ACS- (doors)\n` +
+          `  • ${cctvCount} items matching CA- (cameras)\n` +
           `  • ${otherCount} other items\n\n` +
           `Examples of "other": ${items.filter(n => !ACS_RX.test(n) && !CCTV_RX.test(n)).slice(0, 3).join(", ")}\n\n` +
           `Are you sure this is the right sheet?\n` +
